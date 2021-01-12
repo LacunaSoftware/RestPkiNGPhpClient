@@ -22,8 +22,8 @@ class RestPkiOptions
 
     public function __construct(
         $endpoint,
-        $apiKey,
-        $cultureName = 'en',
+        $apiKey = null,
+        $cultureName = null,
         $usePhpCAInfo = false,
         $caInfoPath = null
     ) {

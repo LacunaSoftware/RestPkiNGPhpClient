@@ -1,0 +1,101 @@
+<?php
+
+
+namespace Lacuna\RestPki;
+
+use Psr\Http\Message\StreamInterface;
+
+/**
+ * Class RestPkiService
+ * @package Lacuna\RestPki
+ */
+class RestPkiService implements RestPkiServiceInterface
+{
+    protected $_client;
+
+    /**
+     * RestPkiService constructor.
+     * @param RestPkiClient $client
+     */
+    public function __construct($client)
+    {
+        $this->_client = $client;
+    }
+
+    /**
+     * @param string $documentId
+     * @return Document
+     */
+    public function getDocument($documentId){
+        if(empty($downloadLink)){
+            throw new \Exception("The document ID was not given.");
+        }
+        $client = $this->_client->getRestClient();
+        $response = $client->get('api/documents/' . $documentId);
+        return new Document($response->getBodyAsJson());
+    }
+
+    /**
+     * @param string $downloadLink
+     * @return Stream
+     */
+    public function openRead($downloadLink){
+        if(empty($downloadLink)){
+            throw new \Exception("The download link was not given.");
+        }
+        return $client->openStream($downloadLink);
+    }
+
+    /**
+     * @param string $downloadLink
+     * @return string|false
+     */
+    public function getContent($downloadLink){
+        if(empty($downloadLink)){
+            throw new \Exception("The download link was not given.");
+        }
+        $stream = $this->openRead($downloadLink);
+        $content = $stream->getContents();
+        $stream->close();
+        return $content;
+    }
+
+    /**
+     * @param string $sessionId
+     * @return SignatureSession
+     */
+    public function getSignatureSession($sessionId){
+        if(empty($sessionId)){
+            throw new \Exception("The session ID was not given.");
+        }
+        $client = $this->_client->getRestClient();
+        $response = $client->get('/api/signature-sessions/' . $sessionId);
+        return new SignatureSession($response->getBodyAsJson());
+    }
+
+    /**
+     * @param CreateSignatureSessionRequest $sessionRequest
+     * @param string $subscriptionId
+     * @return CreateSignatureSessionResponse
+     */
+    public function createSignatureSession($sessionRequest, $subscriptionId = null){
+        if(empty($sessionRequest->returnUrl) && !$sessionRequest->enableBackgroundProcessing){
+            throw new \Exception("The return URL was not given and the Background Processing is not enabled.");
+        }
+        $request = [
+            'returnUrl' => $sessionRequest->returnUrl,
+            'securityContextId' => $sessionRequest->securityContextId,
+            'callbackArgument' => $sessionRequest->callbackArgument,
+            'enableBackgroundProcessing' => $sessionRequest->enableBackgroundProcessing,
+            'disableDownloads' => $sessionRequest->disableDownloads,
+        ];
+        $customHeaders = [];
+        if (isset($subscriptionId)) {
+            $customHeaders['X-Subscription'] = $subscriptionId;
+        }
+        $client = $this->_client->getRestClient($customHeaders);
+
+        $response = $client->post('/api/signature-sessions', $request);
+        return new CreateSignatureSessionResponse($response->getBodyAsJson());
+    }
+}

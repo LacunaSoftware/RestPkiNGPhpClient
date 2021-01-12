@@ -43,7 +43,7 @@ class RestClient
         $endpointUri,
         $apiKey,
         $customRequestHeaders = [],
-        $cultureName = 'en',
+        $cultureName = null,
         $usePhpCAInfo = false,
         $caInfoPath = null
     ) {
@@ -185,11 +185,13 @@ class RestClient
     private function _getClient()
     {
         $headers = [
-            'Accept' => 'application/json',
-            'Accept-Language' => $this->_cultureName
+            'Accept' => 'application/json'
         ];
-        if (!empty($this->apiKey)) {
-            $headers['X-Api-Key'] = $this->apiKey;
+        if (!empty($this->_cultureName)) {
+            $headers['Accept-Language'] = $this->_cultureName;
+        }
+        if (!empty($this->_apiKey)) {
+            $headers['X-Api-Key'] = $this->_apiKey;
         }
         foreach ($this->_customRequestHeaders as $key => $value) {
             $headers[$key] = $value;
