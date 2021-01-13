@@ -27,7 +27,7 @@ class RestPkiService implements RestPkiServiceInterface
      * @return Document
      */
     public function getDocument($documentId){
-        if(empty($downloadLink)){
+        if(empty($documentId)){
             throw new \Exception("The document ID was not given.");
         }
         $client = $this->_client->getRestClient();
