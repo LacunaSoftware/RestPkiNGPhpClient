@@ -15,7 +15,7 @@ class RestPkiService implements RestPkiServiceInterface
 
     /**
      * RestPkiService constructor.
-     * @param RestPkiClient $client
+     * @param RestPkiCoreClient $client
      */
     public function __construct($client)
     {

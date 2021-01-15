@@ -4,16 +4,16 @@
 namespace Lacuna\RestPki;
 
 /**
- * Class RestPkiClient
+ * Class RestPkiCoreClient
  * @package Lacuna\RestPki
  */
-class RestPkiClient
+class RestPkiCoreClient
 {
     protected $_restClient;
     private $options;
 
     /**
-     * RestPkiClient constructor.
+     * RestPkiCoreClient constructor.
      * @param RestPkiOptions $options
      */
     public function __construct($options)
@@ -35,10 +35,10 @@ class RestPkiClient
             $this->_restClient = new RestClient(
                 $this->options->endpoint,
                 $this->options->apiKey,
-                $customRequestHeaders,
-                $this->options->cultureName,
                 $this->options->usePhpCAInfo,
-                $this->options->caInfoPath
+                $this->options->caInfoPath,
+                $this->options->cultureName,
+                $customRequestHeaders
             );
         }
         if (!empty($customRequestHeaders)) {

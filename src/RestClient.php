@@ -42,10 +42,10 @@ class RestClient
     public function __construct(
         $endpointUri,
         $apiKey,
-        $customRequestHeaders = [],
-        $cultureName = null,
         $usePhpCAInfo = false,
-        $caInfoPath = null
+        $caInfoPath = null,
+        $cultureName = null,
+        $customRequestHeaders = []
     ) {
         $this->_endpointUri = $endpointUri;
         $this->_apiKey = $apiKey;
@@ -231,7 +231,8 @@ class RestClient
             try {
                 $response = Util::decodeJson($httpResponse->getBody());
                 if ($statusCode == 422 && isset($response->code)) {
-                    $ex = new RestPkiException($verb, $url, $response);
+                    $ex = new RestPkiException($verb, $url, $response->code,
+                    $response->detail);
                 } else {
                     $ex = new RestErrorException($verb, $url, $statusCode,
                         $response->message);
