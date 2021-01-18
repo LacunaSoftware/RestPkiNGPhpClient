@@ -69,7 +69,7 @@ class RestPkiService implements RestPkiServiceInterface
             throw new \Exception("The session ID was not given.");
         }
         $client = $this->_client->getRestClient();
-        $response = $client->get('/api/signature-sessions/' . $sessionId);
+        $response = $client->get('api/signature-sessions/' . $sessionId);
         return new SignatureSession($response->getBodyAsJson());
     }
 
@@ -95,7 +95,7 @@ class RestPkiService implements RestPkiServiceInterface
         }
         $client = $this->_client->getRestClient($customHeaders);
 
-        $response = $client->post('/api/signature-sessions', $request);
+        $response = $client->post('api/signature-sessions', $request);
         return new CreateSignatureSessionResponse($response->getBodyAsJson());
     }
 }
