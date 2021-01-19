@@ -17,7 +17,6 @@ class SignatureSession
     public function __construct($model)
     {
         $this->id = $model->id;
-        $this->key = $model->key;
         $this->status = $model->status;
         $this->callbackArgument = $model->callbackArgument;
         $this->documents = array();
