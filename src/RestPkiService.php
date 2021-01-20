@@ -43,6 +43,7 @@ class RestPkiService implements RestPkiServiceInterface
         if(empty($downloadLink)){
             throw new \Exception("The download link was not given.");
         }
+        $client = $this->_client->getRestClient();
         return $client->openStream($downloadLink);
     }
 
