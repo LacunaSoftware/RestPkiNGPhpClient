@@ -9,6 +9,7 @@ namespace Lacuna\RestPki;
  *
  * @property $endpoint
  * @property $apiKey
+ * @property $cultureName
  * @property $usePhpCAInfo
  * @property $caInfoPath
  */
@@ -35,6 +36,6 @@ class RestPkiOptions
         if (!isset($caInfoPath)) {
             $caInfoPath = __DIR__ . '/../resources/ca-bundle.pem';
         }
-        $this->_caInfoPath = $caInfoPath;
+        $this->caInfoPath = $caInfoPath;
     }
 }

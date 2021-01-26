@@ -37,7 +37,7 @@ class RestPkiService implements RestPkiServiceInterface
 
     /**
      * @param string $downloadLink
-     * @return Stream
+     * @return StreamInterface
      */
     public function openRead($downloadLink){
         if(empty($downloadLink)){
