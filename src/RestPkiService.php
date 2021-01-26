@@ -26,8 +26,9 @@ class RestPkiService implements RestPkiServiceInterface
      * @param string $documentId
      * @return Document
      */
-    public function getDocument($documentId){
-        if(empty($documentId)){
+    public function getDocument($documentId)
+    {
+        if (empty($documentId)) {
             throw new \Exception("The document ID was not given.");
         }
         $client = $this->_client->getRestClient();
@@ -39,8 +40,9 @@ class RestPkiService implements RestPkiServiceInterface
      * @param string $downloadLink
      * @return StreamInterface
      */
-    public function openRead($downloadLink){
-        if(empty($downloadLink)){
+    public function openRead($downloadLink)
+    {
+        if (empty($downloadLink)) {
             throw new \Exception("The download link was not given.");
         }
         $client = $this->_client->getRestClient();
@@ -51,8 +53,9 @@ class RestPkiService implements RestPkiServiceInterface
      * @param string $downloadLink
      * @return string|false
      */
-    public function getContent($downloadLink){
-        if(empty($downloadLink)){
+    public function getContent($downloadLink)
+    {
+        if (empty($downloadLink)) {
             throw new \Exception("The download link was not given.");
         }
         $stream = $this->openRead($downloadLink);
@@ -65,8 +68,9 @@ class RestPkiService implements RestPkiServiceInterface
      * @param string $sessionId
      * @return SignatureSession
      */
-    public function getSignatureSession($sessionId){
-        if(empty($sessionId)){
+    public function getSignatureSession($sessionId)
+    {
+        if (empty($sessionId)) {
             throw new \Exception("The session ID was not given.");
         }
         $client = $this->_client->getRestClient();
@@ -79,8 +83,9 @@ class RestPkiService implements RestPkiServiceInterface
      * @param string $subscriptionId
      * @return CreateSignatureSessionResponse
      */
-    public function createSignatureSession($sessionRequest, $subscriptionId = null){
-        if(empty($sessionRequest->returnUrl) && !$sessionRequest->enableBackgroundProcessing){
+    public function createSignatureSession($sessionRequest, $subscriptionId = null)
+    {
+        if (empty($sessionRequest->returnUrl) && !$sessionRequest->enableBackgroundProcessing) {
             throw new \Exception("The return URL was not given and the Background Processing is not enabled.");
         }
         $request = [

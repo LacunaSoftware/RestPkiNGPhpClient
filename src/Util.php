@@ -12,10 +12,10 @@ namespace Lacuna\RestPki;
 class Util
 {
     /**
-     * @internal
-     *
      * @param $obj
      * @return false|string
+     * @internal
+     *
      */
     static function encodeJson($obj)
     {
@@ -23,10 +23,10 @@ class Util
     }
 
     /**
-     * @internal
-     *
      * @param $json
      * @return mixed
+     * @internal
+     *
      */
     static function decodeJson($json)
     {

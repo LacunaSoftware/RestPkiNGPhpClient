@@ -22,9 +22,12 @@ class CreateSignatureSessionRequest
     public $disableDownloads;
 
     public function __construct(
-        $returnUrl = null, $securityContextId = null, $callbackArgument = null, 
-        $enableBackgroundProcessing = false, $disableDownloads = false)
-    {
+        $returnUrl = null,
+        $securityContextId = null,
+        $callbackArgument = null,
+        $enableBackgroundProcessing = false,
+        $disableDownloads = false
+    ) {
         $this->returnUrl = $returnUrl;
         $this->securityContextId = $securityContextId;
         $this->callbackArgument = $callbackArgument;

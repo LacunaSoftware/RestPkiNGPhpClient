@@ -6,7 +6,7 @@ namespace Lacuna\RestPki;
 /**
  * Class Document
  * @package Lacuna\RestPki
- * 
+ *
  * @property string $id
  * @property string $key
  * @property DocumentFile $originalFile
@@ -22,7 +22,7 @@ class Document
     public $signedFile;
     public $status;
     public $signatureType;
-    
+
     public function __construct($model)
     {
         $this->id = $model->id;

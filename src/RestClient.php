@@ -232,7 +232,7 @@ class RestClient
                 $response = Util::decodeJson($httpResponse->getBody());
                 if ($statusCode == 422 && isset($response->code)) {
                     $ex = new RestPkiException($verb, $url, $response->code,
-                    $response->detail);
+                        $response->detail);
                 } else {
                     $ex = new RestErrorException($verb, $url, $statusCode,
                         $response->message);

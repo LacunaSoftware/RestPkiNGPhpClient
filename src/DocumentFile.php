@@ -6,7 +6,7 @@ namespace Lacuna\RestPki;
 /**
  * Class DocumentFile
  * @package Lacuna\RestPki
- * 
+ *
  * @property string $name
  * @property string $length
  * @property string $contentType

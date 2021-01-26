@@ -6,7 +6,7 @@ namespace Lacuna\RestPki;
 /**
  * Class ValidateFileResponse
  * @package Lacuna\RestPki
- * 
+ *
  * @property string $accept
  * @property string $rejectReason
  */

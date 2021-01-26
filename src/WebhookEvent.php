@@ -6,7 +6,7 @@ namespace Lacuna\RestPki;
 /**
  * Class WebhookEvent
  * @package Lacuna\RestPki
- * 
+ *
  * @property WebhookEventTypes $type
  * @property Document $document
  */

@@ -6,7 +6,7 @@ namespace Lacuna\RestPki;
 /**
  * Class ValidateFileRequest
  * @package Lacuna\RestPki
- * 
+ *
  * @property string $name
  * @property string $contentType
  * @property int $length
