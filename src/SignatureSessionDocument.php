@@ -7,20 +7,63 @@ namespace Lacuna\RestPki;
  * Class SignatureSessionDocument
  * @package Lacuna\RestPki
  *
- * @property DocumentStatus $status
- * @property DataTime $dateSigned
+ * @property-read DocumentStatus $status
+ * @property-read DataTime $dateSigned
  */
 class SignatureSessionDocument extends Document
 {
-    public $status;
-    public $dateSigned;
+    public $_status;
+    public $_dateSigned;
 
     public function __construct($model)
     {
         parent::__construct($model);
-        $this->status = $model->status;
+        $this->_status = $model->status;
         if (isset($model->dateSigned)) {
-            $this->dateSigned = $model->dateSigned;
+            $this->_dateSigned = new DateTime($model->dateSigned);
+        }
+    }
+
+    
+    /**
+     * @return DocumentStatus The document's status.
+     */
+    public function getStatus()
+    {
+        return $this->_status;
+    }
+
+    /**
+     * @return DataTime The document's signing date.
+     */
+    public function getDateSigned()
+    {
+        return $this->_dateSigned;
+    }
+
+    public function __get($attr)
+    {
+        switch ($attr) {
+            case "status":
+                return $this->getStatus();
+            case "dateSigned":
+                return $this->getDateSigned();
+            default:
+                trigger_error('Undefined property: ' . __CLASS__ . '::$' . $attr);
+                return null;
+        }
+    }
+
+    public function __isset($attr)
+    {
+        switch ($attr) {
+            case "status":
+                return isset($this->_status);
+            case "dateSigned":
+                return isset($this->_dateSigned);
+            default:
+                trigger_error('Undefined property: ' . __CLASS__ . '::$' . $attr);
+                return null;
         }
     }
 }
