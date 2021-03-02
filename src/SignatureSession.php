@@ -21,7 +21,7 @@ class SignatureSession
         $this->callbackArgument = $model->callbackArgument;
         $this->documents = array();
         foreach ($model->documents as $documentModel) {
-            array_push($this->documents, new Document($documentModel));
+            array_push($this->documents, new SignatureSessionDocument($documentModel));
         }
     }
 }

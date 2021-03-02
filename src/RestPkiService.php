@@ -37,6 +37,41 @@ class RestPkiService implements RestPkiServiceInterface
     }
 
     /**
+     * @param string $key
+     * @return Document
+     */
+    public function findDocumentByKey($key)
+    {
+        if (empty($key)) {
+            throw new \Exception("The document key was not given.");
+        }
+        $client = $this->_client->getRestClient();
+        $response = $client->get('api/documents/keys/' . $key);
+        return new Document($response->getBodyAsJson());
+    }
+
+    /**
+     * @param string $documentId
+     * @return Signer[]
+     */
+    public function getDocumentSigners($documentId)
+    {
+        if (empty($documentId)) {
+            throw new \Exception("The document ID was not given.");
+        }
+        $client = $this->_client->getRestClient();
+        $response = $client->get('api/documents/' . $documentId . "/signers");
+        $model = $response->getBodyAsJson();
+        $signers = [];
+        if (isset($model->signers)) {
+            foreach ($model->signers as $signerModel) {
+                $signers[] = new Signer($signerModel);
+            }
+        }
+        return $signers;
+    }
+
+    /**
      * @param string $downloadLink
      * @return StreamInterface
      */
