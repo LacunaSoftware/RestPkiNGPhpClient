@@ -10,7 +10,7 @@ namespace Lacuna\RestPki;
  * @property-read DocumentStatus $status
  * @property-read DataTime $dateSigned
  */
-class SignatureSessionDocument extends Document
+class SignatureSessionDocument extends DocumentSummary
 {
     public $_status;
     public $_dateSigned;
