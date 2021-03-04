@@ -2,6 +2,7 @@
 
 
 namespace Lacuna\RestPki;
+use DateTime;
 
 /**
  * Class SignerSummary
