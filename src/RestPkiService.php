@@ -126,20 +126,12 @@ class RestPkiService implements RestPkiServiceInterface
         if (empty($sessionRequest->returnUrl) && !$sessionRequest->enableBackgroundProcessing) {
             throw new \Exception("The return URL was not given and the Background Processing is not enabled.");
         }
-        $request = [
-            'returnUrl' => $sessionRequest->returnUrl,
-            'securityContextId' => $sessionRequest->securityContextId,
-            'callbackArgument' => $sessionRequest->callbackArgument,
-            'enableBackgroundProcessing' => $sessionRequest->enableBackgroundProcessing,
-            'disableDownloads' => $sessionRequest->disableDownloads,
-        ];
         $customHeaders = [];
         if (isset($subscriptionId)) {
             $customHeaders['X-Subscription'] = $subscriptionId;
         }
         $client = $this->_client->getRestClient($customHeaders);
-
-        $response = $client->post('api/signature-sessions', $request);
+        $response = $client->post('api/signature-sessions', $sessionRequest);
         return new CreateSignatureSessionResponse($response->getBodyAsJson());
     }
 }
