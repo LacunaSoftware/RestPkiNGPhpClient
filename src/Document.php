@@ -17,6 +17,7 @@ class Document extends DocumentSummary
 
     public function __construct($model)
     {
+        parent::__construct($model);
         $this->_signers = array();
         if (isset($model->signers)) {
             foreach ($model->signers as $signer){

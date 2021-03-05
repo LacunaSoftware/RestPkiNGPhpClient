@@ -47,7 +47,12 @@ class RestPkiService implements RestPkiServiceInterface
         }
         $client = $this->_client->getRestClient();
         $response = $client->get('api/documents/keys/' . $key);
-        return new Document($response->getBodyAsJson());
+        $model = $response->getBodyAsJson();
+        if($model->found && isset($model->document)){
+            return new Document($model->document);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -63,10 +68,8 @@ class RestPkiService implements RestPkiServiceInterface
         $response = $client->get('api/documents/' . $documentId . "/signers");
         $model = $response->getBodyAsJson();
         $signers = array();
-        if (isset($model->signers)) {
-            foreach ($model->signers as $signerModel) {
-                array_push($signers, new Signer($signerModel));
-            }
+        foreach ($model as $signerModel) {
+            array_push($signers, new Signer($signerModel));
         }
         return $signers;
     }
