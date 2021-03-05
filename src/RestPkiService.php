@@ -37,6 +37,44 @@ class RestPkiService implements RestPkiServiceInterface
     }
 
     /**
+     * @param string $key
+     * @return Document
+     */
+    public function findDocumentByKey($key)
+    {
+        if (empty($key)) {
+            throw new \Exception("The document key was not given.");
+        }
+        $client = $this->_client->getRestClient();
+        $response = $client->get('api/documents/keys/' . $key);
+        $model = $response->getBodyAsJson();
+        if($model->found && isset($model->document)){
+            return new Document($model->document);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $documentId
+     * @return Signer[]
+     */
+    public function getDocumentSigners($documentId)
+    {
+        if (empty($documentId)) {
+            throw new \Exception("The document ID was not given.");
+        }
+        $client = $this->_client->getRestClient();
+        $response = $client->get('api/documents/' . $documentId . "/signers");
+        $model = $response->getBodyAsJson();
+        $signers = array();
+        foreach ($model as $signerModel) {
+            array_push($signers, new Signer($signerModel));
+        }
+        return $signers;
+    }
+
+    /**
      * @param string $downloadLink
      * @return StreamInterface
      */
@@ -88,20 +126,12 @@ class RestPkiService implements RestPkiServiceInterface
         if (empty($sessionRequest->returnUrl) && !$sessionRequest->enableBackgroundProcessing) {
             throw new \Exception("The return URL was not given and the Background Processing is not enabled.");
         }
-        $request = [
-            'returnUrl' => $sessionRequest->returnUrl,
-            'securityContextId' => $sessionRequest->securityContextId,
-            'callbackArgument' => $sessionRequest->callbackArgument,
-            'enableBackgroundProcessing' => $sessionRequest->enableBackgroundProcessing,
-            'disableDownloads' => $sessionRequest->disableDownloads,
-        ];
         $customHeaders = [];
         if (isset($subscriptionId)) {
             $customHeaders['X-Subscription'] = $subscriptionId;
         }
         $client = $this->_client->getRestClient($customHeaders);
-
-        $response = $client->post('api/signature-sessions', $request);
+        $response = $client->post('api/signature-sessions', $sessionRequest);
         return new CreateSignatureSessionResponse($response->getBodyAsJson());
     }
 }

@@ -7,8 +7,8 @@ namespace Lacuna\RestPki;
  * Class CreateSignatureSessionResponse
  * @package Lacuna\RestPki
  *
- * @property string $sessionId
- * @property string $redirectUrl
+ * @property-read string $sessionId
+ * @property-read string $redirectUrl
  */
 class CreateSignatureSessionResponse
 {
