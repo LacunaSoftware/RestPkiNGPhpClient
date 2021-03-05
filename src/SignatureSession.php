@@ -16,12 +16,12 @@ namespace Lacuna\RestPki;
  */
 class SignatureSession
 {
-    public $_id;
-    public $_status;
-    public $_callbackArgument;
-    public $_processingErrorCode;
-    public $_signerCertificate;
-    public $_documents;
+    protected $_id;
+    protected $_status;
+    protected $_callbackArgument;
+    protected $_processingErrorCode;
+    protected $_signerCertificate;
+    protected $_documents;
 
     public function __construct($model)
     {
@@ -42,27 +42,27 @@ class SignatureSession
         }
     }
 
-    public function getId(){
+    protected function getId(){
         return $this->_id;
     }
 
-    public function getStatus(){
+    protected function getStatus(){
         return $this->_status;
     }
 
-    public function getCallbackArgument(){
+    protected function getCallbackArgument(){
         return $this->_callbackArgument;
     }
 
-    public function getProcessingErrorCode(){
+    protected function getProcessingErrorCode(){
         return $this->_processingErrorCode;
     }
 
-    public function getSignerCertificate(){
+    protected function getSignerCertificate(){
         return $this->_signerCertificate;
     }
 
-    public function getDocuments(){
+    protected function getDocuments(){
         return $this->_documents;
     }
 

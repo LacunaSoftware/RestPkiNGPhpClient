@@ -13,8 +13,8 @@ use DateTime;
  */
 class SignerSummary
 {
-    public $_certificate;
-    public $_date;
+    protected $_certificate;
+    protected $_date;
 
     public function __construct($model)
     {
@@ -27,11 +27,11 @@ class SignerSummary
     }
 
 
-    public function getCertificate()
+    protected function getCertificate()
     {
         return $this->_certificate;
     }
-    public function getDate()
+    protected function getDate()
     {
         return $this->_date;
     }

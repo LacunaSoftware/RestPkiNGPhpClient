@@ -18,13 +18,13 @@ use DateTime;
  */
 class DocumentSummary
 {
-    public $_id;
-    public $_key;
-    public $_formattedKey;
-    public $_originalFile;
-    public $_signedFile;
-    public $_avaliableUntil;
-    public $_signatureType;
+    protected $_id;
+    protected $_key;
+    protected $_formattedKey;
+    protected $_originalFile;
+    protected $_signedFile;
+    protected $_avaliableUntil;
+    protected $_signatureType;
 
     public function __construct($model)
     {
@@ -46,7 +46,7 @@ class DocumentSummary
     /**
      * @return string The document's id.
      */
-    public function getId()
+    protected function getId()
     {
         return $this->_id;
     }
@@ -54,7 +54,7 @@ class DocumentSummary
     /**
      * @return string The document's key.
      */
-    public function getKey()
+    protected function getKey()
     {
         return $this->_key;
     }
@@ -62,7 +62,7 @@ class DocumentSummary
     /**
      * @return string The document's formatted key.
      */
-    public function getFormattedKey()
+    protected function getFormattedKey()
     {
         return $this->_formattedKey;
     }
@@ -70,7 +70,7 @@ class DocumentSummary
     /**
      * @return DocumentFile The original document.
      */
-    public function getOriginalFile()
+    protected function getOriginalFile()
     {
         return $this->_originalFile;
     }
@@ -78,7 +78,7 @@ class DocumentSummary
     /**
      * @return DocumentFile The signed document.
      */
-    public function getSignedFile()
+    protected function getSignedFile()
     {
         return $this->_signedFile;
     }
@@ -86,7 +86,7 @@ class DocumentSummary
     /**
      * @return DateTime The last date that the document will be still avaliable.
      */
-    public function getAvaliableUntil()
+    protected function getAvaliableUntil()
     {
         return $this->_avaliableUntil;
     }
@@ -94,7 +94,7 @@ class DocumentSummary
     /**
      * @return string The type of signature.
      */
-    public function getSignatureType()
+    protected function getSignatureType()
     {
         return $this->_signatureType;
     }

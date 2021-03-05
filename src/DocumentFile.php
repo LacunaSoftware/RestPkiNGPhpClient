@@ -14,10 +14,10 @@ namespace Lacuna\RestPki;
  */
 class DocumentFile
 {
-    public $_name;
-    public $_length;
-    public $_contentType;
-    public $_location;
+    protected $_name;
+    protected $_length;
+    protected $_contentType;
+    protected $_location;
 
     public function __construct($model)
     {
@@ -27,19 +27,19 @@ class DocumentFile
         $this->_location = $model->location;
     }
 
-    public function getName(){
+    protected function getName(){
         return $this->_name;
     }
 
-    public function getLength(){
+    protected function getLength(){
         return $this->_length;
     }
 
-    public function getContentType(){
+    protected function getContentType(){
         return $this->_contentType;
     }
 
-    public function getLocation(){
+    protected function getLocation(){
         return $this->_location;
     }
 

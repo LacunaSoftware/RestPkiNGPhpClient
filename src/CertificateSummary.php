@@ -17,13 +17,13 @@ namespace Lacuna\RestPki;
  */
 class CertificateSummary
 {
-    public $_thumbprint;
-    public $_subjectCommonName;
-    public $_subjectDisplayName;
-    public $_subjectIdentifier;
-    public $_emailAddress;
-    public $_organization;
-    public $_organizationIdentifier;
+    protected $_thumbprint;
+    protected $_subjectCommonName;
+    protected $_subjectDisplayName;
+    protected $_subjectIdentifier;
+    protected $_emailAddress;
+    protected $_organization;
+    protected $_organizationIdentifier;
 
     public function __construct($model)
     {
@@ -36,37 +36,37 @@ class CertificateSummary
         $this->_organizationIdentifier = $model->organizationIdentifier;
     }
 
-    public function getThumbprint()
+    protected function getThumbprint()
     {
         return $this->_thumbprint;
     }
 
-    public function getSubjectCommonName()
+    protected function getSubjectCommonName()
     {
         return $this->_subjectCommonName;
     }
 
-    public function getSubjectDisplayName()
+    protected function getSubjectDisplayName()
     {
         return $this->_subjectDisplayName;
     }
 
-    public function getSubjectIdentifier()
+    protected function getSubjectIdentifier()
     {
         return $this->_subjectIdentifier;
     }
 
-    public function getEmailAddress()
+    protected function getEmailAddress()
     {
         return $this->_emailAddress;
     }
 
-    public function getOrganization()
+    protected function getOrganization()
     {
         return $this->_organization;
     }
 
-    public function getOrganizationIdentifier()
+    protected function getOrganizationIdentifier()
     {
         return $this->_organizationIdentifier;
     }

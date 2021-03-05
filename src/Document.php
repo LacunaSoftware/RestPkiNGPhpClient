@@ -12,8 +12,8 @@ namespace Lacuna\RestPki;
  */
 class Document extends DocumentSummary
 {
-    public $_signers;
-    public $_metadata;
+    protected $_signers;
+    protected $_metadata;
 
     public function __construct($model)
     {
@@ -35,7 +35,7 @@ class Document extends DocumentSummary
     /**
      * @return string The document's signers list.
      */
-    public function getSigners()
+    protected function getSigners()
     {
         return $this->_signers;
     }
@@ -43,7 +43,7 @@ class Document extends DocumentSummary
     /**
      * @return array The document's metadata.
      */
-    public function getMetadata()
+    protected function getMetadata()
     {
         return $this->_metadata;
     }
@@ -56,8 +56,7 @@ class Document extends DocumentSummary
             case "metadata":
                 return $this->getMetadata();
             default:
-                trigger_error('Undefined property: ' . __CLASS__ . '::$' . $attr);
-                return null;
+                return parent::__get($attr);
         }
     }
 
@@ -69,8 +68,7 @@ class Document extends DocumentSummary
             case "metadata":
                 return isset($this->_metadata);
             default:
-                trigger_error('Undefined property: ' . __CLASS__ . '::$' . $attr);
-                return null;
+                return parent::__get($attr);
         }
     }
 }

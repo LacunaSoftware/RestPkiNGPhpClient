@@ -13,8 +13,8 @@ use DateTime;
  */
 class SignatureSessionDocument extends DocumentSummary
 {
-    public $_status;
-    public $_dateSigned;
+    protected $_status;
+    protected $_dateSigned;
 
     public function __construct($model)
     {
@@ -29,7 +29,7 @@ class SignatureSessionDocument extends DocumentSummary
     /**
      * @return DocumentStatus The document's status.
      */
-    public function getStatus()
+    protected function getStatus()
     {
         return $this->_status;
     }
@@ -37,7 +37,7 @@ class SignatureSessionDocument extends DocumentSummary
     /**
      * @return DataTime The document's signing date.
      */
-    public function getDateSigned()
+    protected function getDateSigned()
     {
         return $this->_dateSigned;
     }
@@ -50,8 +50,7 @@ class SignatureSessionDocument extends DocumentSummary
             case "dateSigned":
                 return $this->getDateSigned();
             default:
-                trigger_error('Undefined property: ' . __CLASS__ . '::$' . $attr);
-                return null;
+                return parent::__get($attr);
         }
     }
 
@@ -63,8 +62,7 @@ class SignatureSessionDocument extends DocumentSummary
             case "dateSigned":
                 return isset($this->_dateSigned);
             default:
-                trigger_error('Undefined property: ' . __CLASS__ . '::$' . $attr);
-                return null;
+                return parent::__get($attr);
         }
     }
 }
