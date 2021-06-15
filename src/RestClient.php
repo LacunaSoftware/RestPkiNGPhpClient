@@ -88,6 +88,32 @@ class RestClient
      * @throws RestErrorException
      * @throws RestUnreachableException
      */
+    public function put($url, $data)
+    {
+        $verb = 'PUT';
+        $client = $this->_getClient();
+        $httpResponse = null;
+        try {
+            if (empty($data)) {
+                $httpResponse = $client->put($url);
+            } else {
+                $httpResponse = $client->put($url, array('json' => $data));
+            }
+        } catch (TransferException $ex) {
+            throw new RestUnreachableException($verb, $url, $ex);
+        }
+        $this->_checkResponse($verb, $url, $httpResponse);
+        return HttpResponse::getInstance($httpResponse);
+    }
+
+    /**
+     * @param $url
+     * @param $data
+     * @return HttpResponse
+     * @throws RestPkiException
+     * @throws RestErrorException
+     * @throws RestUnreachableException
+     */
     public function post($url, $data)
     {
         $verb = 'POST';
