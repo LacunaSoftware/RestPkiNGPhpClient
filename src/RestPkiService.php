@@ -4,6 +4,7 @@
 namespace Lacuna\RestPki;
 
 use Psr\Http\Message\StreamInterface;
+use DateTime;
 
 /**
  * Class RestPkiService
@@ -32,7 +33,7 @@ class RestPkiService implements RestPkiServiceInterface
             throw new \Exception("The document ID was not given.");
         }
         $client = $this->_client->getRestClient();
-        $response = $client->get('api/documents/' . $documentId);
+        $response = $client->get(ApiRoutes::DOCUMENTS . '/' . $documentId);
         return new Document($response->getBodyAsJson());
     }
 
@@ -46,7 +47,7 @@ class RestPkiService implements RestPkiServiceInterface
             throw new \Exception("The document key was not given.");
         }
         $client = $this->_client->getRestClient();
-        $response = $client->get('api/documents/keys/' . $key);
+        $response = $client->get(ApiRoutes::DOCUMENTS . '/keys/' . $key);
         $model = $response->getBodyAsJson();
         if($model->found && isset($model->document)){
             return new Document($model->document);
@@ -65,7 +66,7 @@ class RestPkiService implements RestPkiServiceInterface
             throw new \Exception("The document ID was not given.");
         }
         $client = $this->_client->getRestClient();
-        $response = $client->get('api/documents/' . $documentId . "/signers");
+        $response = $client->get(ApiRoutes::DOCUMENTS . '/' . $documentId . "/signers");
         $model = $response->getBodyAsJson();
         $signers = array();
         foreach ($model as $signerModel) {
@@ -112,7 +113,7 @@ class RestPkiService implements RestPkiServiceInterface
             throw new \Exception("The session ID was not given.");
         }
         $client = $this->_client->getRestClient();
-        $response = $client->get('api/signature-sessions/' . $sessionId);
+        $response = $client->get(ApiRoutes::SIGNATURE_SESSION . '/' . $sessionId);
         return new SignatureSession($response->getBodyAsJson());
     }
 
@@ -131,7 +132,134 @@ class RestPkiService implements RestPkiServiceInterface
             $customHeaders['X-Subscription'] = $subscriptionId;
         }
         $client = $this->_client->getRestClient($customHeaders);
-        $response = $client->post('api/signature-sessions', $sessionRequest);
+        $response = $client->post(ApiRoutes::SIGNATURE_SESSION . '/', $sessionRequest);
         return new CreateSignatureSessionResponse($response->getBodyAsJson());
+    }
+
+    /**
+     * @param array $provisionalMetadata
+     * @param string $subscriptionId
+     * @return DocumentKeyModel
+     */
+    public function allocateDocumentKey($provisionalMetadata = null, $subscriptionId = null){
+        $customHeaders = [];
+        if (isset($subscriptionId)) {
+            $customHeaders['X-Subscription'] = $subscriptionId;
+        }
+        $client = $this->_client->getRestClient($customHeaders);
+
+        $request = new AllocateDocumentKeyRequest($provisionalMetadata);
+
+        $response = $client->post(ApiRoutes::DOCUMENT_KEYS . '/', $request);
+        return new DocumentKeyModel($response->getBodyAsJson());
+    }
+
+    /**
+     * @param int $count
+     * @param array $provisionalMetadata
+     * @param string $subscriptionId
+     * @return DocumentKeyModel[]
+     */
+    public function allocateDocumentKeys($count, $provisionalMetadata = null, $subscriptionId = null){
+        $customHeaders = [];
+        if (isset($subscriptionId)) {
+            $customHeaders['X-Subscription'] = $subscriptionId;
+        }
+        $client = $this->_client->getRestClient($customHeaders);
+
+        $request = new AllocateDocumentKeyBatchRequest($count, $provisionalMetadata);
+
+        $response = $client->post(ApiRoutes::DOCUMENT_KEYS . '/batch/', $request);
+
+        $documentKeys = [];
+        foreach ($response->getBodyAsJson() as $documentKey) {
+            array_push($documentKeys, new DocumentKeyModel($documentKey));
+        }
+        return $documentKeys;
+    }
+
+    /**
+     * @param string $name
+     * @param Roles[] $roles
+     * @param array $defaultDocumentMetadata
+     * @param string $subscriptionId
+     * @return ApplicationModel
+     */
+    public function createApplication($name, $roles,  $defaultDocumentMetadata = null, $subscriptionId = null){
+        $customHeaders = [];
+        if (isset($subscriptionId)) {
+            $customHeaders['X-Subscription'] = $subscriptionId;
+        }
+        $client = $this->_client->getRestClient($customHeaders);
+
+        $authData = new AuthorizationData($roles);
+        $rootAuthData = new RootAuthorizationData();
+        $request = new ApplicationData();
+        $request->name = $name;
+        $request->authorizationData = $authData;
+        $request->rootAuthorizationData = $rootAuthData;
+
+        $response = $client->post(ApiRoutes::APPLICATIONS . '/', $request);
+        $applicationModel = new ApplicationModel($response->getBodyAsJson());
+
+        if($defaultDocumentMetadata != null && !empty($defaultDocumentMetadata)) {
+            $this->updateApplicationDefaultDocumentMetadata($applicationModel->id, $defaultDocumentMetadata);
+        }
+
+        return $applicationModel;
+    }
+
+    /**
+     * @param string $applicationId
+     * @param DateTime $expiresOn
+     * @param string $description
+     * @return CreateApplicationApiKeyResponse
+     */
+    public function createApplicationKey($applicationId, $expiresOn = null, $description = null){
+        if ($description == null || empty($description)){
+            $description = "Generated on " . (new DateTime())->format('Y-m-d H:i:sp');
+        }
+
+        $request = new CreateApplicationApiKeyRequest();
+        $request->description = $description;
+        $request->expiresOn = $expiresOn;
+
+        $client = $this->_client->getRestClient();
+        $response = $client->post(ApiRoutes::APPLICATIONS . "/" . $applicationId . "/api-keys/", $request);
+        return new CreateApplicationApiKeyResponse($response->getBodyAsJson());
+    }
+
+    /**
+     * @param string $name
+     * @param Roles[] $roles
+     * @param array $defaultDocumentMetadata
+     * @param string $subscriptionId
+     * @return array
+     */
+    public function createApplicationAndKey($name, $roles,  $defaultDocumentMetadata = null, $subscriptionId = null){
+        $app = $this->createApplication($name, $roles, $defaultDocumentMetadata, $subscriptionId);
+        $key = $this->createApplicationKey($app->id);
+        return [$app, $key->key];
+    }
+
+    /**
+     * @param string $applicationId
+     * @return array
+     */
+    public function getApplicationDefaultDocumentMetadata($applicationId){
+        $client = $this->_client->getRestClient();
+        $response = $client->get(ApiRoutes::APPLICATIONS . "/" . $applicationId . "/default-document-metadata/", $request);
+        return $response->getBodyAsJson();
+    }
+
+    /**
+     * @param string $applicationId
+     * @param array $defaultDocumentMetadata
+     * @return array
+     */
+    public function updateApplicationDefaultDocumentMetadata($applicationId,  $defaultDocumentMetadata){
+        $client = $this->_client->getRestClient();
+        $response = $client->put(ApiRoutes::APPLICATIONS . "/" . $applicationId . "/default-document-metadata/", $defaultDocumentMetadata);
+        return $response->getBodyAsJson();
     }
 }

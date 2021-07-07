@@ -24,4 +24,22 @@ interface RestPkiServiceInterface
     public function openRead($downloadLink);
 
     public function getContent($downloadLink);
+
+    public function allocateDocumentKey($provisionalMetadata, $subscriptionId);
+
+    public function allocateDocumentKeys($count, $provisionalMetadata, $subscriptionId);
+
+    // region Application management
+
+    public function createApplication($name, $roles,  $defaultDocumentMetadata, $subscriptionId);
+
+    public function createApplicationKey($applicationId, $expiresOn, $description);
+
+    public function createApplicationAndKey($name, $roles,  $defaultDocumentMetadata, $subscriptionId);
+
+    public function getApplicationDefaultDocumentMetadata($applicationId);
+
+    public function updateApplicationDefaultDocumentMetadata($applicationId,  $defaultDocumentMetadata);
+
+    // endregion
 }
